@@ -158,12 +158,14 @@ public class BrokerStartup {
                 System.out.printf("Please set the %s variable in your environment to match the location of the RocketMQ installation", MixAll.ROCKETMQ_HOME_ENV);
                 System.exit(-2);
             }
-
+            //获取NameServer的地址
             String namesrvAddr = brokerConfig.getNamesrvAddr();
             if (null != namesrvAddr) {
                 try {
+                    //进行分割地址
                     String[] addrArray = namesrvAddr.split(";");
                     for (String addr : addrArray) {
+                        //
                         RemotingUtil.string2SocketAddress(addr);
                     }
                 } catch (Exception e) {
@@ -175,7 +177,7 @@ public class BrokerStartup {
             }
 
             switch (messageStoreConfig.getBrokerRole()) {
-                case ASYNC_MASTER:
+                case ASYNC_MASTER://
                 case SYNC_MASTER:
                     brokerConfig.setBrokerId(MixAll.MASTER_ID);
                     break;

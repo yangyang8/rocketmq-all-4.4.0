@@ -24,15 +24,22 @@ package org.apache.rocketmq.common.protocol.route;
 /**
  * 队列的长度等于这 Topic数据存储的 Master Broker 的个数， QueueData 里存储 Broker
  * 读写数量,queue 同步标识等
+ *
+ *          brokeName                           clusterName
+ * topic ================> brokerAddrTable  =================>  clusterAddrTable
+ *                                          =================>   brokerLiveTable
+ *                                          =================>
+ *
+ *
  */
 public class QueueData implements Comparable<QueueData> {
     //Broker的名称
     private String brokerName;
-    //读队列的数量
+    //读队列的数量，默认为4个读队列
     private int readQueueNums;
-    //写队列的数量
+    //写队列的数量，默认为4个写队列
     private int writeQueueNums;
-    private int perm;
+    private int perm;//权限
     //同步标识
     private int topicSynFlag;
 

@@ -144,6 +144,11 @@ public class RemotingUtil {
         }
     }
 
+    /**
+     * 获取到地址
+     * @param addr
+     * @return
+     */
     public static SocketAddress string2SocketAddress(final String addr) {
         String[] s = addr.split(":");
         InetSocketAddress isa = new InetSocketAddress(s[0], Integer.parseInt(s[1]));
