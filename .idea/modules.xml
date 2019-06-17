@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/acl/rocketmq-acl.iml" filepath="$PROJECT_DIR$/acl/rocketmq-acl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rocketmq-all.iml" filepath="$PROJECT_DIR$/rocketmq-all.iml" />
+      <module fileurl="file://$PROJECT_DIR$/broker/rocketmq-broker.iml" filepath="$PROJECT_DIR$/broker/rocketmq-broker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/client/rocketmq-client.iml" filepath="$PROJECT_DIR$/client/rocketmq-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/rocketmq-common.iml" filepath="$PROJECT_DIR$/common/rocketmq-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/distribution/rocketmq-distribution.iml" filepath="$PROJECT_DIR$/distribution/rocketmq-distribution.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example/rocketmq-example.iml" filepath="$PROJECT_DIR$/example/rocketmq-example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/filter/rocketmq-filter.iml" filepath="$PROJECT_DIR$/filter/rocketmq-filter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/logappender/rocketmq-logappender.iml" filepath="$PROJECT_DIR$/logappender/rocketmq-logappender.iml" />
+      <module fileurl="file://$PROJECT_DIR$/logging/rocketmq-logging.iml" filepath="$PROJECT_DIR$/logging/rocketmq-logging.iml" />
+      <module fileurl="file://$PROJECT_DIR$/namesrv/rocketmq-namesrv.iml" filepath="$PROJECT_DIR$/namesrv/rocketmq-namesrv.iml" />
+      <module fileurl="file://$PROJECT_DIR$/openmessaging/rocketmq-openmessaging.iml" filepath="$PROJECT_DIR$/openmessaging/rocketmq-openmessaging.iml" />
+      <module fileurl="file://$PROJECT_DIR$/remoting/rocketmq-remoting.iml" filepath="$PROJECT_DIR$/remoting/rocketmq-remoting.iml" />
+      <module fileurl="file://$PROJECT_DIR$/srvutil/rocketmq-srvutil.iml" filepath="$PROJECT_DIR$/srvutil/rocketmq-srvutil.iml" />
+      <module fileurl="file://$PROJECT_DIR$/store/rocketmq-store.iml" filepath="$PROJECT_DIR$/store/rocketmq-store.iml" />
+      <module fileurl="file://$PROJECT_DIR$/test/rocketmq-test.iml" filepath="$PROJECT_DIR$/test/rocketmq-test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tools/rocketmq-tools.iml" filepath="$PROJECT_DIR$/tools/rocketmq-tools.iml" />
+    </modules>
+  </component>
+</project>
