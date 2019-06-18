@@ -90,7 +90,7 @@ public class Configuration {
 
     /**
      * register config properties
-     *
+     * 解析Propertis成Configuration对象
      * @return the current Configuration object
      */
     public Configuration registerConfig(Properties extProperties) {

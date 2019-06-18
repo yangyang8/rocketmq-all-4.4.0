@@ -158,13 +158,18 @@ public class NamesrvController {
         return true;
     }
 
+
+    /**
+     * 进行增加远程处理器
+     */
     private void registerProcessor() {
         if (namesrvConfig.isClusterTest()) {
 
+            //
             this.remotingServer.registerDefaultProcessor(new ClusterTestRequestProcessor(this, namesrvConfig.getProductEnvName()),
                 this.remotingExecutor);
         } else {
-
+            //进行注册远程通信
             this.remotingServer.registerDefaultProcessor(new DefaultRequestProcessor(this), this.remotingExecutor);
         }
     }

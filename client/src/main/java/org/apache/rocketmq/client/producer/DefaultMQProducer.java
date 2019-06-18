@@ -44,6 +44,7 @@ import org.apache.rocketmq.remoting.netty.NettyRemotingClient;
 
 /**
  * This class is the entry point for applications intending to send messages.
+ * 这个类是发送信息的入口类
  * </p>
  *
  * It's fine to tune fields which exposes getter/setter methods, but keep in mind, all of them should work well out of
@@ -58,6 +59,7 @@ import org.apache.rocketmq.remoting.netty.NettyRemotingClient;
  * <strong>Thread Safety:</strong> After configuring and starting process, this class can be regarded as thread-safe
  * and used among multiple threads context.
  * </p>
+ * 这个是一个线程安全的类
  */
 public class DefaultMQProducer extends ClientConfig implements MQProducer {
 
@@ -78,6 +80,10 @@ public class DefaultMQProducer extends ClientConfig implements MQProducer {
      *
      * See {@linktourl http://rocketmq.apache.org/docs/core-concept/} for more discussion.
      */
+    /**
+     * 聚合了相同角色的所有的生产实例，这个生产者组对于事务消息是重要
+     * 生产者组的一定要配置，这个是一个强制的规定
+     */
     private String producerGroup;
 
     /**
@@ -88,7 +94,7 @@ public class DefaultMQProducer extends ClientConfig implements MQProducer {
     /**
      * Number of queues to create per default topic.
      */
-    private volatile int defaultTopicQueueNums = 4;
+    private volatile int defaultTopicQueueNums = 4;//默认有4个主题生产队列
 
     /**
      * Timeout for sending messages.
@@ -176,7 +182,7 @@ public class DefaultMQProducer extends ClientConfig implements MQProducer {
 
     /**
      * Constructor specifying producer group.
-     *
+     * 构造一个生产者对象
      * @param producerGroup Producer group, see the name-sake field.
      */
     public DefaultMQProducer(final String producerGroup) {
@@ -728,12 +734,20 @@ public class DefaultMQProducer extends ClientConfig implements MQProducer {
      * Sets an Executor to be used for executing asynchronous send. If the Executor is not set, {@link
      * DefaultMQProducerImpl#defaultAsyncSenderExecutor} will be used.
      *
+     * 设置一个一步的线程给一步，如果这个线程执行器没有设置的话，那么则这个Executor则会启动
      * @param asyncSenderExecutor the instance of Executor
      */
     public void setAsyncSenderExecutor(final ExecutorService asyncSenderExecutor) {
         this.defaultMQProducerImpl.setAsyncSenderExecutor(asyncSenderExecutor);
     }
 
+
+    /**
+     * 批量消费数据
+     * @param msgs
+     * @return
+     * @throws MQClientException
+     */
     private MessageBatch batch(Collection<Message> msgs) throws MQClientException {
         MessageBatch msgBatch;
         try {
@@ -749,6 +763,17 @@ public class DefaultMQProducer extends ClientConfig implements MQProducer {
         return msgBatch;
     }
 
+
+
+
+
+    //##########################################下面的这些就是一些getter和setter方法#####################################################
+
+
+    /**
+     * 设置消息者组
+     * @return
+     */
     public String getProducerGroup() {
         return producerGroup;
     }
@@ -761,6 +786,11 @@ public class DefaultMQProducer extends ClientConfig implements MQProducer {
         return createTopicKey;
     }
 
+
+    /**
+     * 设置Topic
+     * @param createTopicKey
+     */
     public void setCreateTopicKey(String createTopicKey) {
         this.createTopicKey = createTopicKey;
     }

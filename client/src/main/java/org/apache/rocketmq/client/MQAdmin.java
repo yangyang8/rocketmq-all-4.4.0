@@ -108,6 +108,7 @@ public interface MQAdmin {
 
     /**
      * @return The {@code MessageExt} of given msgId
+     * 根据消息编号来查询消息信息
      */
     MessageExt viewMessage(String topic,
         String msgId) throws RemotingException, MQBrokerException, InterruptedException, MQClientException;

@@ -31,6 +31,10 @@ import org.apache.rocketmq.remoting.exception.RemotingCommandException;
 import org.apache.rocketmq.logging.InternalLogger;
 import org.apache.rocketmq.logging.InternalLoggerFactory;
 
+
+/**
+ * 这个实体类当中主要是封装了所有
+ */
 public class RemotingCommand {
     public static final String SERIALIZE_TYPE_PROPERTY = "rocketmq.serialize.type";
     public static final String SERIALIZE_TYPE_ENV = "ROCKETMQ_SERIALIZE_TYPE";
@@ -41,8 +45,8 @@ public class RemotingCommand {
     private static final Map<Class<? extends CommandCustomHeader>, Field[]> CLASS_HASH_MAP =
         new HashMap<Class<? extends CommandCustomHeader>, Field[]>();
     private static final Map<Class, String> CANONICAL_NAME_CACHE = new HashMap<Class, String>();
-    // 1, Oneway
-    // 1, RESPONSE_COMMAND
+    // 1, Oneway  单向发送信息
+    // 1, RESPONSE_COMMAND    响应命令
     private static final Map<Field, Boolean> NULLABLE_FIELD_CACHE = new HashMap<Field, Boolean>();
     private static final String STRING_CANONICAL_NAME = String.class.getCanonicalName();
     private static final String DOUBLE_CANONICAL_NAME_1 = Double.class.getCanonicalName();
@@ -86,9 +90,13 @@ public class RemotingCommand {
     }
 
     public static RemotingCommand createRequestCommand(int code, CommandCustomHeader customHeader) {
+        //请求参数
         RemotingCommand cmd = new RemotingCommand();
+        //请求的状态码
         cmd.setCode(code);
+        //自定义头信息
         cmd.customHeader = customHeader;
+        //设置版本
         setCmdVersion(cmd);
         return cmd;
     }
@@ -149,14 +157,17 @@ public class RemotingCommand {
         byte[] headerData = new byte[headerLength];
         byteBuffer.get(headerData);
 
+        //解析头信息
         RemotingCommand cmd = headerDecode(headerData, getProtocolType(oriHeaderLen));
 
+        //长度
         int bodyLength = length - 4 - headerLength;
         byte[] bodyData = null;
         if (bodyLength > 0) {
             bodyData = new byte[bodyLength];
             byteBuffer.get(bodyData);
         }
+        //设置Body信息
         cmd.body = bodyData;
 
         return cmd;
