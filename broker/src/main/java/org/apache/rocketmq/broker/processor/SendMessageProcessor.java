@@ -53,6 +53,10 @@ import java.net.SocketAddress;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * 发送消息处理器
+ */
 public class SendMessageProcessor extends AbstractSendMessageProcessor implements NettyRequestProcessor {
 
     private List<ConsumeMessageHook> consumeMessageHookList;

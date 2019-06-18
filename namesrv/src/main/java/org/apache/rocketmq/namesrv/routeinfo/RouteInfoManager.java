@@ -65,6 +65,9 @@ public class RouteInfoManager {
      * 的属性信息 Value 是个 QueueData 队列，队里的长度等于这 Topic数
      * 据存储的 Master Broker 的个数， QueueData 里存储 Broker
      * 读写数量,queue 同步标识等
+     *
+     *
+     * 一个Topic有多个队列
      */
     private final HashMap<String/* topic */, List<QueueData>> topicQueueTable;
 
@@ -74,6 +77,9 @@ public class RouteInfoManager {
      * Master 和多个 Slave 这个结构存储着一个 BrokerName 对应的属性信
      * 息，包括所属的 Cluster 名称， 一个Master Broker 和多个 Slave Broker
      * 的地址信息
+     *
+     *
+     * 一个brokerName当中存储了主从的Broker
      */
     private final HashMap<String/* brokerName */, BrokerData> brokerAddrTable;
 
@@ -81,6 +87,8 @@ public class RouteInfoManager {
      * 存储的是集群中 cluster 信息，结果很简单，就是一个 Cluster 名称对
      * 应一个由 BrokerName 组成的集合
      *
+     *
+     * 一个clusterName存储了所有的Broker
      */
     private final HashMap<String/* clusterName */, Set<String/* brokerName */>> clusterAddrTable;
 
@@ -105,6 +113,9 @@ public class RouteInfoManager {
      */
     private final HashMap<String/* brokerAddr */, List<String>/* Filter Server */> filterServerTable;
 
+    /**
+     * 初始化相关的信息
+     */
     public RouteInfoManager() {
         this.topicQueueTable = new HashMap<String, List<QueueData>>(1024);
         this.brokerAddrTable = new HashMap<String, BrokerData>(128);
@@ -113,6 +124,10 @@ public class RouteInfoManager {
         this.filterServerTable = new HashMap<String, List<String>>(256);
     }
 
+    /**
+     * 集群信息
+     * @return
+     */
     public byte[] getAllClusterInfo() {
         ClusterInfo clusterInfoSerializeWrapper = new ClusterInfo();
         clusterInfoSerializeWrapper.setBrokerAddrTable(this.brokerAddrTable);
