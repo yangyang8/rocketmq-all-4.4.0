@@ -89,6 +89,11 @@ import org.apache.rocketmq.remoting.exception.RemotingTooMuchRequestException;
 public class DefaultMQProducerImpl implements MQProducerInner {
     private final InternalLogger log = ClientLogger.getLog();
     private final Random random = new Random();
+
+
+    /**
+     * 默认的MQ生产者实例对象
+     */
     private final DefaultMQProducer defaultMQProducer;
     private final ConcurrentMap<String/* topic */, TopicPublishInfo> topicPublishInfoTable =
         new ConcurrentHashMap<String, TopicPublishInfo>();
@@ -96,7 +101,9 @@ public class DefaultMQProducerImpl implements MQProducerInner {
     private final RPCHook rpcHook;
     protected BlockingQueue<Runnable> checkRequestQueue;
     protected ExecutorService checkExecutor;
-    private ServiceState serviceState = ServiceState.CREATE_JUST;
+    //主要是记录我们的生产服务实例的的状态
+    private ServiceState serviceState = ServiceState.CREATE_JUST;//一创建服务的状态就为刚创建，还没有开始
+    //客户端实例
     private MQClientInstance mQClientFactory;
     private ArrayList<CheckForbiddenHook> checkForbiddenHookList = new ArrayList<CheckForbiddenHook>();
     private int zipCompressLevel = Integer.parseInt(System.getProperty(MixAll.MESSAGE_COMPRESS_LEVEL, "5"));
@@ -112,6 +119,7 @@ public class DefaultMQProducerImpl implements MQProducerInner {
     }
 
     public DefaultMQProducerImpl(final DefaultMQProducer defaultMQProducer, RPCHook rpcHook) {
+        //进行创建一个MQ生产对象
         this.defaultMQProducer = defaultMQProducer;
         this.rpcHook = rpcHook;
 
@@ -164,13 +172,23 @@ public class DefaultMQProducerImpl implements MQProducerInner {
         log.info("register sendMessage Hook, {}", hook.hookName());
     }
 
+    /**
+     * 做一些准备性的工作
+     * @throws MQClientException
+     */
     public void start() throws MQClientException {
         this.start(true);
     }
 
+
+    /**
+     * 根据服务器的状态进行初始化相关的操作
+     * @param startFactory
+     * @throws MQClientException
+     */
     public void start(final boolean startFactory) throws MQClientException {
         switch (this.serviceState) {
-            case CREATE_JUST:
+            case CREATE_JUST://刚刚创建
                 this.serviceState = ServiceState.START_FAILED;
 
                 this.checkConfig();
@@ -181,17 +199,23 @@ public class DefaultMQProducerImpl implements MQProducerInner {
 
                 this.mQClientFactory = MQClientManager.getInstance().getAndCreateMQClientInstance(this.defaultMQProducer, rpcHook);
 
+                //注册生产者
                 boolean registerOK = mQClientFactory.registerProducer(this.defaultMQProducer.getProducerGroup(), this);
-                if (!registerOK) {
+                if (!registerOK) {//注册失败
                     this.serviceState = ServiceState.CREATE_JUST;
                     throw new MQClientException("The producer group[" + this.defaultMQProducer.getProducerGroup()
                         + "] has been created before, specify another name please." + FAQUrl.suggestTodo(FAQUrl.GROUP_NAME_DUPLICATE_URL),
                         null);
                 }
 
+                //注册成功
                 this.topicPublishInfoTable.put(this.defaultMQProducer.getCreateTopicKey(), new TopicPublishInfo());
 
-                if (startFactory) {
+                /**
+                 * Step4 启动 QClientlnstance ，如果 MQClientlnstance已经启动 ，则本次启动不会真
+                 * 正执行 MQClientlnstance 启动过程将在第五章讲解消息消费时有详细的介绍
+                 */
+                if (startFactory) {//默认为true
                     mQClientFactory.start();
                 }
 
@@ -213,10 +237,15 @@ public class DefaultMQProducerImpl implements MQProducerInner {
         this.mQClientFactory.sendHeartbeatToAllBrokerWithLock();
     }
 
+    /**
+     * 检测我们的客户端的相关配置
+     * @throws MQClientException
+     */
     private void checkConfig() throws MQClientException {
+        //检测生产者组名称是否已经写了，和有没有包含相关的非法字符
         Validators.checkGroup(this.defaultMQProducer.getProducerGroup());
 
-        if (null == this.defaultMQProducer.getProducerGroup()) {
+        if (null == this.defaultMQProducer.getProducerGroup()) {//上面不是已经检测了吗，为什么这里还要再加一层检测
             throw new MQClientException("producerGroup is null", null);
         }
 
@@ -512,6 +541,19 @@ public class DefaultMQProducerImpl implements MQProducerInner {
         this.mqFaultStrategy.updateFaultItem(brokerName, currentLatency, isolation);
     }
 
+
+    /**
+     * 发送消息
+     * @param msg
+     * @param communicationMode
+     * @param sendCallback
+     * @param timeout
+     * @return
+     * @throws MQClientException
+     * @throws RemotingException
+     * @throws MQBrokerException
+     * @throws InterruptedException
+     */
     private SendResult sendDefaultImpl(
         Message msg,
         final CommunicationMode communicationMode,

@@ -24,12 +24,18 @@ import org.apache.rocketmq.remoting.protocol.LanguageCode;
 
 /**
  * Client Common configuration
+ *
+ * 客户端的通用的配置类
  */
 public class ClientConfig {
     public static final String SEND_MESSAGE_WITH_VIP_CHANNEL_PROPERTY = "com.rocketmq.sendMessageWithVIPChannel";
+    //名称服务
     private String namesrvAddr = System.getProperty(MixAll.NAMESRV_ADDR_PROPERTY, System.getenv(MixAll.NAMESRV_ADDR_ENV));
+    //当前的客户端实例的Key
     private String clientIP = RemotingUtil.getLocalAddress();
+    //实例名称
     private String instanceName = System.getProperty("rocketmq.client.name", "DEFAULT");
+    //回调线程数
     private int clientCallbackExecutorThreads = Runtime.getRuntime().availableProcessors();
     /**
      * Pulling topic information interval from the named server
@@ -49,8 +55,14 @@ public class ClientConfig {
 
     private boolean useTLS = TlsSystemConfig.tlsEnable;
 
+    //语句，java
     private LanguageCode language = LanguageCode.JAVA;
 
+
+    /**
+     * 获取客户端
+     * @return
+     */
     public String buildMQClientId() {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClientIP());

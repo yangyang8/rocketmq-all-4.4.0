@@ -19,14 +19,26 @@ package org.apache.rocketmq.client.producer;
 import com.alibaba.fastjson.JSON;
 import org.apache.rocketmq.common.message.MessageQueue;
 
+
+/**
+ * 消息发送结果
+ *
+ * [SendResult [sendStatus=SEND_OK,
+ * msgId=C0A81FDA210018B4AAC25F1C1D320000,
+ * offsetMsgId=C0A81FDA00002A9F000000000006AA26,
+ * messageQueue=MessageQueue [topic=topic_test, brokerName=PC-20170327WDKR, queueId=2], queueOffset=0]]
+ *
+ *
+ */
 public class SendResult {
+    //生产者发送消息的状态
     private SendStatus sendStatus;
-    private String msgId;
-    private MessageQueue messageQueue;
-    private long queueOffset;
-    private String transactionId;
-    private String offsetMsgId;
-    private String regionId;
+    private String msgId;//消息编号
+    private MessageQueue messageQueue;//消息队列
+    private long queueOffset;//队列的偏移量
+    private String transactionId;//事务编号
+    private String offsetMsgId;//消息偏移量
+    private String regionId;//区域编号
     private boolean traceOn = true;
 
     public SendResult() {

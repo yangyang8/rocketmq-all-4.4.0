@@ -82,6 +82,12 @@ import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.apache.rocketmq.remoting.netty.NettyClientConfig;
 import org.apache.rocketmq.remoting.protocol.RemotingCommand;
 
+
+/**
+ * MQ客户端实例
+ * MQClientlnstance 封装了 RocketMQ 网络处理 API ，是消息生产者（ Producer ）、消息消费者
+ * Consumer ）与 NameServer、Broker 打交道的网络通道
+ */
 public class MQClientInstance {
     private final static long LOCK_TIMEOUT_MILLIS = 3000;
     private final InternalLogger log = ClientLogger.getLog();
@@ -89,9 +95,16 @@ public class MQClientInstance {
     private final int instanceIndex;
     private final String clientId;
     private final long bootTimestamp = System.currentTimeMillis();
+    //生产者列表
     private final ConcurrentMap<String/* group */, MQProducerInner> producerTable = new ConcurrentHashMap<String, MQProducerInner>();
+    //消息者列表
     private final ConcurrentMap<String/* group */, MQConsumerInner> consumerTable = new ConcurrentHashMap<String, MQConsumerInner>();
+    //管理员列表
     private final ConcurrentMap<String/* group */, MQAdminExtInner> adminExtTable = new ConcurrentHashMap<String, MQAdminExtInner>();
+
+    /**
+     * Nett
+     */
     private final NettyClientConfig nettyClientConfig;
     private final MQClientAPIImpl mQClientAPIImpl;
     private final MQAdminImpl mQAdminImpl;
@@ -122,6 +135,14 @@ public class MQClientInstance {
         this(clientConfig, instanceIndex, clientId, null);
     }
 
+
+    /**
+     * MQ客户端实例对象
+     * @param clientConfig
+     * @param instanceIndex
+     * @param clientId
+     * @param rpcHook
+     */
     public MQClientInstance(ClientConfig clientConfig, int instanceIndex, String clientId, RPCHook rpcHook) {
         this.clientConfig = clientConfig;
         this.instanceIndex = instanceIndex;
@@ -220,30 +241,43 @@ public class MQClientInstance {
         return mqList;
     }
 
+
+    /**
+     * Step4 启动 QClientlnstance ，如果 MQClientlnstance已经启动 ，则本次启动不会真
+     * 正执行。MQClientlnstance 启动过程将在第五章讲解消息消费时有详细的介绍
+     * @throws MQClientException
+     */
     public void start() throws MQClientException {
 
         synchronized (this) {
             switch (this.serviceState) {
                 case CREATE_JUST:
+                    //设置当前的服务状态为启动失败
                     this.serviceState = ServiceState.START_FAILED;
                     // If not specified,looking address from name server
+                    // 如果没有指定NameServer的地址，那么则调用如下的接口，获取名称服务地址
                     if (null == this.clientConfig.getNamesrvAddr()) {
+                        //获取名称服务地址
                         this.mQClientAPIImpl.fetchNameServerAddr();
                     }
                     // Start request-response channel
+                    //进行开启请求-响应通道,也就是开始Netty服务器
                     this.mQClientAPIImpl.start();
                     // Start various schedule tasks
+                    //开启不同的任务调度
                     this.startScheduledTask();
                     // Start pull service
+                    //开启推消息服务
                     this.pullMessageService.start();
                     // Start rebalance service
+                    //开启负载均衡操作
                     this.rebalanceService.start();
                     // Start push service
-                    this.defaultMQProducer.getDefaultMQProducerImpl().start(false);
+                    this.defaultMQProducer.getDefaultMQProducerImpl().start(false);//
                     log.info("the client factory [{}] start OK", this.clientId);
-                    this.serviceState = ServiceState.RUNNING;
+                    this.serviceState = ServiceState.RUNNING;//修改当前服务的状态
                     break;
-                case RUNNING:
+                case RUNNING://已经启动，则不会真正执行这个操作
                     break;
                 case SHUTDOWN_ALREADY:
                     break;
@@ -255,7 +289,15 @@ public class MQClientInstance {
         }
     }
 
+
+    /**
+     * 开启各种任务调度操作
+     */
     private void startScheduledTask() {
+
+        /**
+         * 每隔2分钟获取一下NameServer地址
+         */
         if (null == this.clientConfig.getNamesrvAddr()) {
             this.scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
 
@@ -910,6 +952,13 @@ public class MQClientInstance {
         }
     }
 
+
+    /**
+     * 开始注册生产者
+     * @param group
+     * @param producer
+     * @return
+     */
     public boolean registerProducer(final String group, final DefaultMQProducerImpl producer) {
         if (null == group || null == producer) {
             return false;

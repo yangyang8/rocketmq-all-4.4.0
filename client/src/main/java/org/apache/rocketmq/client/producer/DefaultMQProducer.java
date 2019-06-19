@@ -191,7 +191,7 @@ public class DefaultMQProducer extends ClientConfig implements MQProducer {
 
     /**
      * Constructor specifying producer group and enabled msg trace flag.
-     *
+     *  是否启动消息催踪
      * @param producerGroup Producer group, see the name-sake field.
      * @param enableMsgTrace Switch flag instance for message trace.
      */
@@ -231,12 +231,17 @@ public class DefaultMQProducer extends ClientConfig implements MQProducer {
      * </p>
      *
      * @throws MQClientException if there is any unexpected error.
+     * 开启生产者实例
+     * 这个方法主要是在发送信息之前做一些准备性的工作,所以在发送消息之前要先进行
+     * 调用这个方法
      */
     @Override
     public void start() throws MQClientException {
+        //进行做一些准备性的工具
         this.defaultMQProducerImpl.start();
         if (null != traceDispatcher) {
             try {
+                //进行开始连接我们的名称服务,获取到Broker的相关地址
                 traceDispatcher.start(this.getNamesrvAddr());
             } catch (MQClientException e) {
                 log.warn("trace dispatcher start failed ", e);

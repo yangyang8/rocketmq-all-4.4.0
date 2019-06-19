@@ -17,10 +17,12 @@ public class ProducerV1 {
     public static void main(String[] args) throws MQClientException, RemotingException, InterruptedException, MQBrokerException {
 
         //先创建一个默认的推送信息
-        DefaultMQProducer producer=new DefaultMQProducer("quickstart_test_product_name");
+        //quickstart_test_product_name 这个一定要写，不写的话，会检测到生产者组没有名称，有报错
+        DefaultMQProducer producer=new DefaultMQProducer("quickstart_test_product_name");//DEFAULT_PRODUCER
+//        DefaultMQProducer producer=new DefaultMQProducer("DEFAULT_PRODUCER");//
 
         //进行设置NameServer_Add地址
-        producer.setNamesrvAddr("192.168.31.128:9876");
+        producer.setNamesrvAddr("192.168.31.218:9876");
 
         //进行开启生产都
         producer.start();
