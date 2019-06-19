@@ -53,6 +53,8 @@ import static org.apache.rocketmq.remoting.netty.TlsSystemConfig.TLS_ENABLE;
  * Broker RocketMQ 的核心，大部分‘重量级”工作都是由 Broker 完成的，
  * 包括接收 Producer 发过来的消息、处理 Consumer 的消费消息请求、－消息的持
  * 久化存储、消息的 HA 机制以及服务端过滤功能等
+ *
+ * -n 127.0.0.1:9876
  */
 public class BrokerStartup {
     public static Properties properties = null;
