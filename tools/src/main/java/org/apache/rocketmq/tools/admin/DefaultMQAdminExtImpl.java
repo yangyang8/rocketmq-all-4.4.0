@@ -127,6 +127,7 @@ public class DefaultMQAdminExtImpl implements MQAdminExt, MQAdminExtInner {
 
                 log.info("the adminExt [{}] start OK", this.defaultMQAdminExt.getAdminExtGroup());
 
+                //修改成RUNNING状态
                 this.serviceState = ServiceState.RUNNING;
                 break;
             case RUNNING:
