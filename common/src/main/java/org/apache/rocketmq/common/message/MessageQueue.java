@@ -18,11 +18,17 @@ package org.apache.rocketmq.common.message;
 
 import java.io.Serializable;
 
+
+/**
+ * 消息队列,封装到SendResult当中
+ *
+ * MessageQueue [topic=topic_test, brokerName=PC-20170327WDKR, queueId=2]
+ */
 public class MessageQueue implements Comparable<MessageQueue>, Serializable {
     private static final long serialVersionUID = 6191200464116433425L;
-    private String topic;
-    private String brokerName;
-    private int queueId;
+    private String topic;//主题
+    private String brokerName;//Broker的名称,默认为是主机的名称
+    private int queueId;//队列编号
 
     public MessageQueue() {
 
