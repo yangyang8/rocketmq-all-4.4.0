@@ -194,6 +194,7 @@ public class NettyRemotingServer extends NettyRemotingAbstract implements Remoti
                 .option(ChannelOption.SO_REUSEADDR, true)
                 .option(ChannelOption.SO_KEEPALIVE, false)
                 .childOption(ChannelOption.TCP_NODELAY, true)
+<<<<<<< HEAD
                 .childOption(ChannelOption.SO_SNDBUF, nettyServerConfig.getServerSocketSndBufSize())
                 .childOption(ChannelOption.SO_RCVBUF, nettyServerConfig.getServerSocketRcvBufSize())
                 //HandshakeHandler
@@ -201,12 +202,17 @@ public class NettyRemotingServer extends NettyRemotingAbstract implements Remoti
                 //NettyConnectManageHandler
                 //NettyServerHandler
                 .localAddress(new InetSocketAddress(this.nettyServerConfig.getListenPort()))
+=======
+                .childOption(ChannelOption.SO_SNDBUF, nettyServerConfig.getServerSocketSndBufSize())//设置发送数据的大小
+                .childOption(ChannelOption.SO_RCVBUF, nettyServerConfig.getServerSocketRcvBufSize())//设置接到的数据缓冲大小
+                .localAddress(new InetSocketAddress(this.nettyServerConfig.getListenPort()))//监听的端口
+>>>>>>> d955e4a738099b8e64495b3f514f755d19147c28
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     public void initChannel(SocketChannel ch) throws Exception {
                         ch.pipeline()
                             .addLast(defaultEventExecutorGroup, HANDSHAKE_HANDLER_NAME,
-                                new HandshakeHandler(TlsSystemConfig.tlsMode))
+                                new HandshakeHandler(TlsSystemConfig.tlsMode))//处理器1
                             .addLast(defaultEventExecutorGroup,
                                 new NettyEncoder(),
                                 new NettyDecoder(),
@@ -352,6 +358,9 @@ public class NettyRemotingServer extends NettyRemotingAbstract implements Remoti
         return this.publicExecutor;
     }
 
+    /**
+     * 服务器处理器1
+     */
     class HandshakeHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
         private final TlsMode tlsMode;
@@ -367,6 +376,7 @@ public class NettyRemotingServer extends NettyRemotingAbstract implements Remoti
 
             // mark the current position so that we can peek the first byte to determine if the content is starting with
             // TLS handshake
+            //先标记
             msg.markReaderIndex();
 
             byte b = msg.getByte(0);

@@ -48,6 +48,7 @@ public class Validators {
 
     /**
      * Validate group
+     * 检测生产者是不是设置了生产者组的名称，没有写就报错
      */
     public static void checkGroup(String group) throws MQClientException {
         if (UtilAll.isBlank(group)) {
@@ -76,16 +77,27 @@ public class Validators {
 
     /**
      * Validate message
+     *
+     * 检验消息
+     * 消息发送之前，首先确保生产者处于运行状态，然后验证消息是否符合相应的规范，
+     * 具体的规范要求是主题名称，消息体不能为空,消息长度不能等于0,mo认不能超过允许
+     * 发送消息的最大长度 4M (maxMessageSize=l024 * 1024 *
+     *
+     *
+     *
      */
     public static void checkMessage(Message msg, DefaultMQProducer defaultMQProducer)
         throws MQClientException {
+        //消息对象不能为空
         if (null == msg) {
             throw new MQClientException(ResponseCode.MESSAGE_ILLEGAL, "the message is null");
         }
         // topic
+        //主题名称不能为空
         Validators.checkTopic(msg.getTopic());
 
         // body
+        //消息体不能为空
         if (null == msg.getBody()) {
             throw new MQClientException(ResponseCode.MESSAGE_ILLEGAL, "the message body is null");
         }

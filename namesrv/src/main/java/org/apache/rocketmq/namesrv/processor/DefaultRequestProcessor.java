@@ -68,7 +68,12 @@ import org.apache.rocketmq.remoting.protocol.RemotingCommand;
  *
  * 此外，连接断开的事件也会触发状态更新，具体逻辑在 org.apache.rocketmq.routeinfo的
  * BrokerHousekeepingService类中
- */
+ *
+ *
+ *
+ *
+ * 默认处理器，里面主要是封装了NameServerController，主要是用于给broker发布信息和处理信息的相关操作
+ **/
 public class DefaultRequestProcessor implements NettyRequestProcessor {
     private static InternalLogger log = InternalLoggerFactory.getLogger(LoggerName.NAMESRV_LOGGER_NAME);
 

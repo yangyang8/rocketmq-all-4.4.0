@@ -61,7 +61,7 @@ public class AsyncTraceDispatcher implements TraceDispatcher {
     private final ThreadPoolExecutor traceExecuter;
     // The last discard number of log
     private AtomicLong discardCount;
-    private Thread worker;
+    private Thread worker;//工作进行开始
     private ArrayBlockingQueue<TraceContext> traceContextQueue;
     private ArrayBlockingQueue<Runnable> appenderQueue;
     private volatile Thread shutDownHook;
@@ -69,7 +69,7 @@ public class AsyncTraceDispatcher implements TraceDispatcher {
     private DefaultMQProducerImpl hostProducer;
     private DefaultMQPushConsumerImpl hostConsumer;
     private volatile ThreadLocalIndex sendWhichQueue = new ThreadLocalIndex();
-    private String dispatcherId = UUID.randomUUID().toString();
+    private String dispatcherId = UUID.randomUUID().toString();//分发消息
     private String traceTopicName;
     private AtomicBoolean isStarted = new AtomicBoolean(false);
 
