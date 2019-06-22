@@ -70,6 +70,7 @@ public abstract class NettyRemotingAbstract {
 
     /**
      * This map caches all on-going requests.
+     * 这个实体当中缓存了所有的请求的内容
      */
     protected final ConcurrentMap<Integer /* opaque */, ResponseFuture> responseTable =
         new ConcurrentHashMap<Integer, ResponseFuture>(256);
@@ -135,8 +136,9 @@ public abstract class NettyRemotingAbstract {
     }
 
     /**
+     * 处理接收到的消息接口
      * Entry of incoming command processing.
-     *
+     * 处理请求命令的入口
      * <p>
      * <strong>Note:</strong>
      * The incoming remoting command may be
@@ -154,10 +156,10 @@ public abstract class NettyRemotingAbstract {
         final RemotingCommand cmd = msg;
         if (cmd != null) {
             switch (cmd.getType()) {
-                case REQUEST_COMMAND:
+                case REQUEST_COMMAND://请求命令
                     processRequestCommand(ctx, cmd);
                     break;
-                case RESPONSE_COMMAND:
+                case RESPONSE_COMMAND://响应命令
                     processResponseCommand(ctx, cmd);
                     break;
                 default:
@@ -369,6 +371,8 @@ public abstract class NettyRemotingAbstract {
      * <p>
      * This method is periodically invoked to scan and expire deprecated request.
      * </p>
+     * 每隔3分钟调用一次
+     * 这个方法被周期性的调用，主要是为了扫描和删除过期请求
      */
     public void scanResponseTable() {
         final List<ResponseFuture> rfList = new LinkedList<ResponseFuture>();

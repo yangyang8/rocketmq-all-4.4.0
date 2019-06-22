@@ -20,12 +20,16 @@ package org.apache.rocketmq.remoting.netty;
 import io.netty.channel.Channel;
 import org.apache.rocketmq.remoting.protocol.RemotingCommand;
 
+
+/**
+ * 请求任务，是一个多少线程对象，主要是用于
+ */
 public class RequestTask implements Runnable {
     private final Runnable runnable;
-    private final long createTimestamp = System.currentTimeMillis();
-    private final Channel channel;
-    private final RemotingCommand request;
-    private boolean stopRun = false;
+    private final long createTimestamp = System.currentTimeMillis();//开始时间
+    private final Channel channel;//通道
+    private final RemotingCommand request;//远程命令请求参数封装实体类
+    private boolean stopRun = false;// 是否停止运行
 
     public RequestTask(final Runnable runnable, final Channel channel, final RemotingCommand request) {
         this.runnable = runnable;
@@ -83,6 +87,7 @@ public class RequestTask implements Runnable {
     public void returnResponse(int code, String remark) {
         final RemotingCommand response = RemotingCommand.createResponseCommand(code, remark);
         response.setOpaque(request.getOpaque());
+        //进行写数据到通道当中
         this.channel.writeAndFlush(response);
     }
 }

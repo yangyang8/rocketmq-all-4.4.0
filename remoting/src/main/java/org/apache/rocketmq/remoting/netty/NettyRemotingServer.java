@@ -172,6 +172,7 @@ public class NettyRemotingServer extends NettyRemotingAbstract implements Remoti
             && Epoll.isAvailable();
     }
 
+    //#######################################开启服务器开始############################################
     @Override
     public void start() {
         this.defaultEventExecutorGroup = new DefaultEventExecutorGroup(
@@ -195,6 +196,10 @@ public class NettyRemotingServer extends NettyRemotingAbstract implements Remoti
                 .childOption(ChannelOption.TCP_NODELAY, true)
                 .childOption(ChannelOption.SO_SNDBUF, nettyServerConfig.getServerSocketSndBufSize())
                 .childOption(ChannelOption.SO_RCVBUF, nettyServerConfig.getServerSocketRcvBufSize())
+                //HandshakeHandler
+                //IdleStateHandler
+                //NettyConnectManageHandler
+                //NettyServerHandler
                 .localAddress(new InetSocketAddress(this.nettyServerConfig.getListenPort()))
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
@@ -228,11 +233,15 @@ public class NettyRemotingServer extends NettyRemotingAbstract implements Remoti
             this.nettyEventExecutor.start();
         }
 
+        /**
+         * 每隔3s扫描一下响应表内容
+         */
         this.timer.scheduleAtFixedRate(new TimerTask() {
 
             @Override
             public void run() {
                 try {
+                    //
                     NettyRemotingServer.this.scanResponseTable();
                 } catch (Throwable e) {
                     log.error("scanResponseTable exception", e);
@@ -241,13 +250,18 @@ public class NettyRemotingServer extends NettyRemotingAbstract implements Remoti
         }, 1000 * 3, 1000);
     }
 
+    //#############################################开启Netty服务器结束###########################################
+
+
+
+
+    //##############################################优雅关闭资源开始######################################
     @Override
     public void shutdown() {
         try {
             if (this.timer != null) {
                 this.timer.cancel();
             }
-
             this.eventLoopGroupBoss.shutdownGracefully();
 
             this.eventLoopGroupSelector.shutdownGracefully();
@@ -271,6 +285,10 @@ public class NettyRemotingServer extends NettyRemotingAbstract implements Remoti
             }
         }
     }
+
+    //############################################优雅关闭资源结束##########################################
+
+
 
     @Override
     public void registerRPCHook(RPCHook rpcHook) {

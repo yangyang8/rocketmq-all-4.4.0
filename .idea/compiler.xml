@@ -10,6 +10,7 @@
         <module name="rocketmq-broker" />
         <module name="rocketmq-client" />
         <module name="rocketmq-common" />
+        <module name="rocketmq-console-ng" />
         <module name="rocketmq-example" />
         <module name="rocketmq-filter" />
         <module name="rocketmq-logappender" />
@@ -29,6 +30,7 @@
       <module name="rocketmq-broker" target="1.7" />
       <module name="rocketmq-client" target="1.6" />
       <module name="rocketmq-common" target="1.6" />
+      <module name="rocketmq-console-ng" target="1.7" />
       <module name="rocketmq-distribution" target="1.7" />
       <module name="rocketmq-example" target="1.7" />
       <module name="rocketmq-filter" target="1.7" />

@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/broker/rocketmq-broker.iml" filepath="$PROJECT_DIR$/broker/rocketmq-broker.iml" />
       <module fileurl="file://$PROJECT_DIR$/client/rocketmq-client.iml" filepath="$PROJECT_DIR$/client/rocketmq-client.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/rocketmq-common.iml" filepath="$PROJECT_DIR$/common/rocketmq-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rocketmq-console/rocketmq-console-ng.iml" filepath="$PROJECT_DIR$/rocketmq-console/rocketmq-console-ng.iml" />
       <module fileurl="file://$PROJECT_DIR$/distribution/rocketmq-distribution.iml" filepath="$PROJECT_DIR$/distribution/rocketmq-distribution.iml" />
       <module fileurl="file://$PROJECT_DIR$/example/rocketmq-example.iml" filepath="$PROJECT_DIR$/example/rocketmq-example.iml" />
       <module fileurl="file://$PROJECT_DIR$/filter/rocketmq-filter.iml" filepath="$PROJECT_DIR$/filter/rocketmq-filter.iml" />
